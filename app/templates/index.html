@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Name Picker — Create a Wheel{% endblock %}
+{% block content %}
+<main class="center-page">
+  <div class="card">
+    <h1>🎡 Name Picker</h1>
+    <p class="muted">Create a spinning wheel for your classroom. You'll get a link to project for the class, plus a private admin page.</p>
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+    <form method="post" action="/wheels">
+      <label>Wheel title
+        <input type="text" name="title" placeholder="Mrs. Smith's 3rd Grade" required maxlength="100">
+      </label>
+      <label>Names (one per line)
+        <textarea name="names" rows="10" placeholder="Ava&#10;Liam&#10;Sofia&#10;Noah" required></textarea>
+      </label>
+      <label>Admin password
+        <input type="password" name="password" required minlength="4" maxlength="128">
+        <small class="muted">This protects your admin page. Minimum 4 characters.</small>
+      </label>
+      <button type="submit" class="btn primary">Create Wheel</button>
+    </form>
+  </div>
+</main>
+{% endblock %}

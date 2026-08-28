@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Admin Login — {{ title }}{% endblock %}
+{% block content %}
+<main class="center-page">
+  <div class="card">
+    <h1>🔒 Admin Login</h1>
+    <p class="muted">{{ title }}</p>
+    <form method="post" action="/w/{{ code }}/admin/login">
+      <label>Password
+        <input type="password" name="password" required autofocus>
+      </label>
+      <button type="submit" class="btn primary">Log in</button>
+    </form>
+    <p><a href="/w/{{ code }}">← Back to wheel</a></p>
+  </div>
+</main>
+<script>
+  if (new URLSearchParams(location.search).get("error")) {
+    alert("Incorrect password.");
+  }
+</script>
+{% endblock %}

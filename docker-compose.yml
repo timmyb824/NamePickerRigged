@@ -1,0 +1,14 @@
+services:
+  namepicker:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      # Set this to a long random string so admin logins survive restarts
+      SESSION_SECRET: ${SESSION_SECRET:-change-me-to-a-long-random-string}
+    volumes:
+      - namepicker-data:/data
+    restart: unless-stopped
+
+volumes:
+  namepicker-data:

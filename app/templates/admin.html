@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+{% block title %}Admin — {{ title }}{% endblock %}
+{% block content %}
+<main class="admin-page">
+  <div class="card wide">
+    <div class="admin-header">
+      <h1>⚙️ {{ title }}</h1>
+      <form method="post" action="/w/{{ code }}/admin/logout">
+        <button type="submit" class="btn small">Log out</button>
+      </form>
+    </div>
+
+    {% if created %}
+    <div class="notice">
+      <strong>Wheel created!</strong> Save these links:
+    </div>
+    {% endif %}
+
+    <section class="links">
+      <p>
+        <span class="muted">Class view (project this):</span><br>
+        <a id="wheel-link" href="/w/{{ code }}">/w/{{ code }}</a>
+        <button class="btn small" type="button" onclick="copyLink('wheel-link')">Copy link</button>
+      </p>
+      <p>
+        <span class="muted">This admin page (keep private):</span><br>
+        <a id="admin-link" href="/w/{{ code }}/admin">/w/{{ code }}/admin</a>
+        <button class="btn small" type="button" onclick="copyLink('admin-link')">Copy link</button>
+      </p>
+    </section>
+
+    <section>
+      <h2>Names</h2>
+      <label>Wheel title
+        <input type="text" id="title-input" value="{{ title }}" maxlength="100">
+      </label>
+      <label>One name per line
+        <textarea id="names-input" rows="12">{{ names | join("\n") }}</textarea>
+      </label>
+      <button class="btn primary" type="button" onclick="saveContent()">Save names</button>
+      <span id="save-status" class="status"></span>
+      <p class="muted small-print">Saving names clears any rigged outcome.</p>
+    </section>
+
+    <section>
+      <h2>🎯 Outcome control</h2>
+      <p class="muted">Pre-select who the wheel lands on. This is never shown on the class view.</p>
+      <p id="rig-status" class="rig-status">
+        {% if rig_name %}
+        Currently rigged: <strong>{{ rig_name }}</strong> ({{ rig_mode }})
+        {% else %}
+        Not rigged — spins are random.
+        {% endif %}
+      </p>
+      <div class="rig-controls">
+        <label>Winner
+          <select id="rig-select">
+            <option value="">— random —</option>
+            {% for name in names %}
+            <option value="{{ loop.index0 }}" {% if rig_name == name %}selected{% endif %}>{{ name }}</option>
+            {% endfor %}
+          </select>
+        </label>
+        <label>Applies
+          <select id="rig-mode">
+            <option value="once" {% if rig_mode != "sticky" %}selected{% endif %}>Next spin only</option>
+            <option value="sticky" {% if rig_mode == "sticky" %}selected{% endif %}>Every spin until cleared</option>
+          </select>
+        </label>
+        <button class="btn primary" type="button" onclick="saveRig()">Set outcome</button>
+        <button class="btn" type="button" onclick="clearRig()">Clear</button>
+      </div>
+      <span id="rig-save-status" class="status"></span>
+    </section>
+
+    <section class="danger-zone">
+      <h2>Danger zone</h2>
+      <form method="post" action="/w/{{ code }}/admin/delete" onsubmit="return confirm('Delete this wheel permanently?');">
+        <button type="submit" class="btn danger">Delete wheel</button>
+      </form>
+    </section>
+  </div>
+</main>
+
+<script>
+  const CODE = {{ code | tojson }};
+
+  function copyLink(id) {
+    const url = new URL(document.getElementById(id).getAttribute("href"), location.origin);
+    navigator.clipboard.writeText(url.href);
+  }
+
+  async function saveContent() {
+    const names = document.getElementById("names-input").value
+      .split("\n").map(n => n.trim()).filter(Boolean);
+    const res = await fetch(`/w/${CODE}/admin/content`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({title: document.getElementById("title-input").value, names}),
+    });
+    document.getElementById("save-status").textContent = res.ok ? "Saved ✓" : "Error — need at least 2 names.";
+    if (res.ok) setTimeout(() => location.reload(), 600);
+  }
+
+  async function saveRig() {
+    const idx = document.getElementById("rig-select").value;
+    const mode = document.getElementById("rig-mode").value;
+    const res = await fetch(`/w/${CODE}/admin/rig`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(idx === "" ? {rig_index: null} : {rig_index: Number(idx), mode}),
+    });
+    document.getElementById("rig-save-status").textContent = res.ok ? "Saved ✓" : "Error.";
+    if (res.ok) setTimeout(() => location.reload(), 600);
+  }
+
+  async function clearRig() {
+    await fetch(`/w/${CODE}/admin/rig`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({rig_index: null}),
+    });
+    location.reload();
+  }
+</script>
+{% endblock %}

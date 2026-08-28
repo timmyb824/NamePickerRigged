@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+<main class="wheel-page">
+  <h1 class="wheel-title" id="wheel-title">{{ title }}</h1>
+  <div class="wheel-layout">
+    <div class="wheel-stage">
+      <canvas id="wheel-canvas"></canvas>
+      <div class="pointer"></div>
+      <button id="spin-btn" class="spin-btn" type="button">SPIN</button>
+    </div>
+    <aside class="names-panel">
+      <h2>Names</h2>
+      <ul id="names-list"></ul>
+    </aside>
+  </div>
+  <footer class="wheel-footer">
+    <a class="subtle" href="/w/{{ code }}/admin" title="Settings">⚙</a>
+  </footer>
+</main>
+
+<div id="winner-overlay" class="overlay hidden">
+  <canvas id="confetti-canvas"></canvas>
+  <div class="winner-box">
+    <p class="winner-label">🎉 Winner 🎉</p>
+    <p id="winner-name" class="winner-name"></p>
+    <button id="winner-close" class="btn primary" type="button">OK</button>
+  </div>
+</div>
+
+<script>
+  window.WHEEL_CODE = {{ code | tojson }};
+</script>
+<script src="/static/wheel.js"></script>
+{% endblock %}
