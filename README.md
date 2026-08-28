@@ -2,6 +2,10 @@
 
 A wheel-of-names style classroom spinner built for my wife who teaches elementary school. The teacher can secretly pre-select who the wheel lands on from a hidden admin page; the class-facing wheel page shows no trace of it.
 
+![create wheel](img/screenshot.png)
+![admin page](img/screenshot2.png)
+![spin page](img/screenshot3.png)
+
 ## How it works
 
 1. Visit `/` and create a wheel: title, names (one per line), admin password.
