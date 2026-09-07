@@ -53,7 +53,9 @@ Or `docker compose up` / `podman compose up` (set `SESSION_SECRET` first).
 
 ## Environment variables
 
-| Variable         | Default | Purpose                                  |
-| ---------------- | ------- | ---------------------------------------- |
-| `SESSION_SECRET` | random  | Signs admin session cookies              |
-| `DATA_DIR`       | `data`  | Directory containing the SQLite database |
+| Variable           | Default | Purpose                                                                    |
+| ------------------ | ------- | -------------------------------------------------------------------------- |
+| `SESSION_SECRET`   | random  | Signs admin session cookies                                                |
+| `DATA_DIR`         | `data`  | Directory containing the SQLite database                                   |
+| `UMAMI_SCRIPT_URL` | unset   | Optional analytics script URL (e.g. `https://umami.example.com/script.js`) |
+| `UMAMI_WEBSITE_ID` | unset   | Optional analytics website ID; both vars must be set to enable tracking    |

@@ -8,8 +8,9 @@
   <link rel="stylesheet" href="/static/style.css">
   <link rel="icon"
     href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🎡</text></svg>">
-  <script defer src="https://umami.timmybtech.com/script.js"
-    data-website-id="e0ced905-c477-416f-8e89-e4bb794ff3e5"></script>
+  {% if umami_script_url and umami_website_id %}
+  <script defer src="{{ umami_script_url }}" data-website-id="{{ umami_website_id }}"></script>
+  {% endif %}
 </head>
 
 <body>
