@@ -1,6 +1,6 @@
 #!/bin/bash
 
-IMAGE_NAME="timothybryantjr"
+IMAGE_NAME="name-picker-rigged"
 REGISTRY="registry.local.timmybtech.com"
 TAG="latest"
 PLATFORM="linux/amd64"
