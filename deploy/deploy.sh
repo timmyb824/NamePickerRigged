@@ -47,9 +47,9 @@ else
 fi
 
 check_k8s_cluster() {
-    msg_info "Checking we are pointing to the prod cluster (k3s-prod)..."
-    if ! kubectl config current-context | grep -q "k3s-prod"; then
-        handle_error "You must be pointing to the prod cluster (k3s-prod) to deploy."
+    msg_info "Checking we are pointing to the prod cluster (k3s-prod or default)..."
+    if ! kubectl config current-context | grep -q "default\|k3s-prod"; then
+        handle_error "You must be pointing to the prod cluster (k3s-prod or default) to deploy."
     fi
 }
 
